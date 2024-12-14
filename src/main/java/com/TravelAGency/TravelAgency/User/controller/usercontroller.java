@@ -25,7 +25,8 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 public class usercontroller {
 
-
+    @Autowired
+    private JwtUtil jwtUtil;
     @Autowired
     private UserService authService;
     @Autowired
@@ -33,7 +34,7 @@ public class usercontroller {
     @Autowired
     private final AuthenticationManager authenticationManager;
 
-    //private final JwtUil jwtUil;
+
     public usercontroller(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
@@ -52,6 +53,7 @@ public class usercontroller {
         return userRepo.findAll();
     }
 
+    @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
     public AuthenticationReponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticationManager.authenticate(
@@ -59,18 +61,18 @@ public class usercontroller {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect Username or passwd.");
         }
-        final UserDetails userDetails =null;
-        Optional<UserModel> optionalUser = Optional.ofNullable(userRepo.findFirstByEmail(userDetails.getUsername()));
-        final String jwt= JwtUtil.generateToken(userDetails);
 
-        AuthenticationReponse authenticationReponse =new AuthenticationReponse();
-        if(optionalUser.isPresent()) {
+        final UserDetails userDetails = null; // Fetch the UserDetails from your service or repo
+        Optional<UserModel> optionalUser = Optional.ofNullable(userRepo.findFirstByEmail(userDetails.getUsername()));
+
+        // Use the public method to generate the JWT
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        AuthenticationReponse authenticationReponse = new AuthenticationReponse();
+        if (optionalUser.isPresent()) {
             authenticationReponse.setJwt(jwt);
             authenticationReponse.setUserId(optionalUser.get().getId());
         }
         return authenticationReponse;
-
-
-
     }
 }

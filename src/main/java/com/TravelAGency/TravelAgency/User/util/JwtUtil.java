@@ -15,14 +15,16 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
-private String generateToken(Map<String, Object> extraClaims, UserDetails details) {
-    return Jwts.builder().setClaims(extraClaims).setSubject(details.getUsername())
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis()+1000*60*60*24))
-            .signWith(getSigninKey(), SignatureAlgorithm.HS256)
-            .compact();
+    public String generateToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours expiration
+                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
+                .compact();
 
 }
+
 
 private Key getSigninKey() {
     byte[] keyBytes = Decoders.BASE64.decode("41F4428472B4B6250655368566D5970337336763979244226452948404D6351");
