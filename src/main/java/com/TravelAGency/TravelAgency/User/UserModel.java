@@ -1,0 +1,79 @@
+package com.TravelAGency.TravelAgency.User;
+
+import com.TravelAGency.TravelAgency.User.dto.UserDto;
+import jakarta.persistence.*;
+import lombok.Data;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+
+@Entity
+@Data
+@Table(name="Users")
+@Component
+@Scope("prototype")
+public class UserModel {
+   private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPasswd(String passwd) {
+        return this.passwd;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    private String passwd;
+    private String email;
+    private int phoneNumber;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//generating pk
+    private Long id;
+
+public UserDto getDto()
+{
+    UserDto userdto=new UserDto();
+    userdto.setId(id);
+
+    userdto.setEmail(email);
+    userdto.setName(name);
+
+    userdto.setPhoneNumber(phoneNumber);
+return userdto;
+}
+
+
+}
