@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthService implements UserService
 {
     private final UserRepo userRepository;
-    private UserRepo userRepo;//comment noran to be removed
+    private UserRepo userRepo;
 @Autowired
     public AuthService(UserRepo userRepository) {
         this.userRepository = userRepository;
@@ -34,7 +34,6 @@ public class AuthService implements UserService
         UserModel user=new UserModel();
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
-        user.setPasswd(signUpRequest.getPasswd());
 
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
        user.getPasswd(signUpRequest.getPasswd());
