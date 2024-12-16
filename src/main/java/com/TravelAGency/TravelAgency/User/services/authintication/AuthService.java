@@ -19,12 +19,12 @@ public class AuthService implements UserService
     private UserRepo userRepo;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-@Autowired
+    @Autowired
     public AuthService(UserRepo userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
         this.userRepository = userRepository;
-    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-}
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Autowired
     public void setter(UserRepo userRepo) {
@@ -32,7 +32,7 @@ public class AuthService implements UserService
     }
 
 
-//takes request info and save it to the db
+    //takes request info and save it to the db
     public UserDto signUpUser(signUpRequest signUpRequest)
     {
         UserModel user=new UserModel();
@@ -52,14 +52,14 @@ public class AuthService implements UserService
     }
 
     public UserDetailsService userDetailsService(){
-    return new UserDetailsService() {
-        @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            Optional<UserModel> userOptional = Optional.ofNullable(userRepository.findFirstByEmail(username));
-            return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                Optional<UserModel> userOptional = Optional.ofNullable(userRepository.findFirstByEmail(username));
+                return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        }
-    };
+            }
+        };
     }
 
 }
