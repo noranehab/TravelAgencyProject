@@ -27,6 +27,8 @@ import java.util.List;
 public class WebSecurityConfig {
 
 
+
+
     private final UserService userService;
 @Autowired
 @Lazy
@@ -48,7 +50,7 @@ public class WebSecurityConfig {
                 }))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated());   //missing part if we want admin role video 18
 
         return http.build();
     }

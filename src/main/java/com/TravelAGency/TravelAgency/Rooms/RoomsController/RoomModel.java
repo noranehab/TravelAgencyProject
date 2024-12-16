@@ -1,6 +1,7 @@
 package com.TravelAGency.TravelAgency.Rooms.RoomsController;
 
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.Enum.RoomSpec;
+import com.TravelAGency.TravelAgency.hotel.HotelModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
@@ -54,5 +55,14 @@ public class RoomModel
 
     public Long getId() {
         return RoomId;
+    }
+
+    // Many rooms can belong to one hotel
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private HotelModel hotel; // Each room belongs to a hotel
+
+    public void setHotel(HotelModel hotel) {
+        this.hotel = hotel;
     }
 }
