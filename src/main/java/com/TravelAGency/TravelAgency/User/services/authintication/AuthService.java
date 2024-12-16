@@ -34,6 +34,7 @@ public class AuthService implements UserService
         UserModel user=new UserModel();
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
+        user.setPasswd(signUpRequest.getPasswd());
 
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
        user.getPasswd(signUpRequest.getPasswd());
