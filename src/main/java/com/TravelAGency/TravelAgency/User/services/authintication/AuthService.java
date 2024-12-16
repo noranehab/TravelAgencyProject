@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthService implements UserService
 {
     private final UserRepo userRepository;
-    private UserRepo userRepo;
+    private UserRepo userRepo;//comment
 @Autowired
     public AuthService(UserRepo userRepository) {
         this.userRepository = userRepository;
