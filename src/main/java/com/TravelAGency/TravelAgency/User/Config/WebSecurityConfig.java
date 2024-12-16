@@ -24,7 +24,7 @@ import java.util.List;
 @ComponentScan(basePackages = "com.TravelAGency.TravelAgency.User.services.authintication")
 
 public class WebSecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
 
 
