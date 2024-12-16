@@ -52,13 +52,10 @@ public class AuthService implements UserService
     }
 
     public UserDetailsService userDetailsService(){
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                Optional<UserModel> userOptional = Optional.ofNullable(userRepository.findFirstByEmail(username));
-                return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            Optional<UserModel> userOptional = Optional.ofNullable(userRepository.findFirstByEmail(username));
+            return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            }
         };
     }
 

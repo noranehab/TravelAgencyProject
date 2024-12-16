@@ -15,7 +15,7 @@ public class EventController {
     @Autowired
     private EventRepository eventRepository;
 
-    @PostMapping("/{hotelId}/events")
+    @PostMapping("/{hotelId}/add-event")
     public EventModel addEventToHotel(@PathVariable Long hotelId, @RequestBody EventModel eventModel) {
         HotelModel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new RuntimeException("Hotel not found!"));

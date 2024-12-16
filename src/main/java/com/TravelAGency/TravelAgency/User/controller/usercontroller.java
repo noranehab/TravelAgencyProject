@@ -26,8 +26,7 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 public class usercontroller {
 
-    @Autowired
-    private final JwtUtil jwtUtil;
+
     @Autowired
     private final AuthService authService;
     @Autowired
@@ -39,8 +38,8 @@ public class usercontroller {
 
 
 
-    public usercontroller(JwtUtil jwtUtil, AuthService authService, UserRepo userRepo, AuthenticationManager authenticationManager, UserService userService) {
-        this.jwtUtil = jwtUtil;
+    public usercontroller( AuthService authService, UserRepo userRepo, AuthenticationManager authenticationManager, UserService userService) {
+
         this.authService = authService;
         this.userRepo = userRepo;
         this.authenticationManager = authenticationManager;

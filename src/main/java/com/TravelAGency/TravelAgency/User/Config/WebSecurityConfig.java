@@ -26,13 +26,11 @@ import java.util.List;
 
 public class WebSecurityConfig {
 
-
-
-
     private final UserService userService;
 @Autowired
 @Lazy
-    public WebSecurityConfig(UserService userService) {
+    public WebSecurityConfig(UserService userService)
+{
         this.userService = userService;
     }
 
