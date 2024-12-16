@@ -1,9 +1,9 @@
 package com.TravelAGency.TravelAgency.Event;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface EventRepository extends JpaRepository<EventModel, Long> {
-    List<EventModel> findByHotelId(Long hotelId);
+
 }
