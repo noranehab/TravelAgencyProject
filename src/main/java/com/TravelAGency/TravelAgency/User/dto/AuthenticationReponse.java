@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class AuthenticationReponse
 {
+    private Long userId;
+
     private String jwt;
 
     public Long getUserId() {
@@ -23,6 +25,5 @@ public class AuthenticationReponse
         this.jwt = jwt;
     }
 
-    private Long userId;
 
 }

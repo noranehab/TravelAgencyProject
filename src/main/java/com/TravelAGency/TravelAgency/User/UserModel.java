@@ -65,6 +65,7 @@ public class UserModel implements UserDetails {
         this.id = id;
     }
 
+    @Column(name = "passwd", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//generating pk
     private Long id;
@@ -73,7 +74,7 @@ public UserDto getDto()
 {
     UserDto userdto=new UserDto();
     userdto.setId(id);
-
+    userdto.setPasswd(passwd);
     userdto.setEmail(email);
     userdto.setName(name);
 
@@ -89,12 +90,12 @@ return userdto;
 
     @Override
     public String getPassword() {
-        return "";
+        return passwd;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return name;
     }
 
     @Override

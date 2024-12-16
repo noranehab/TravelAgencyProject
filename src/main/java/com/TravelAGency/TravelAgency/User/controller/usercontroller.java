@@ -6,6 +6,7 @@ import com.TravelAGency.TravelAgency.User.dto.AuthenticationReponse;
 import com.TravelAGency.TravelAgency.User.dto.AuthenticationRequest;
 import com.TravelAGency.TravelAgency.User.dto.UserDto;
 import com.TravelAGency.TravelAgency.User.dto.signUpRequest;
+import com.TravelAGency.TravelAgency.User.services.authintication.AuthService;
 import com.TravelAGency.TravelAgency.User.services.authintication.UserService;
 import com.TravelAGency.TravelAgency.User.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,24 @@ import java.util.Optional;
 public class usercontroller {
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
     @Autowired
-    private UserService authService;
+    private final AuthService authService;
     @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
     @Autowired
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private final UserService userService;
 
 
-    public usercontroller(AuthenticationManager authenticationManager) {
+
+    public usercontroller(JwtUtil jwtUtil, AuthService authService, UserRepo userRepo, AuthenticationManager authenticationManager, UserService userService) {
+        this.jwtUtil = jwtUtil;
+        this.authService = authService;
+        this.userRepo = userRepo;
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
@@ -53,7 +61,7 @@ public class usercontroller {
         return userRepo.findAll();
     }
 
-    @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public AuthenticationReponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticationManager.authenticate(
@@ -62,7 +70,7 @@ public class usercontroller {
             throw new BadCredentialsException("Incorrect Username or passwd.");
         }
 
-        final UserDetails userDetails = null; // Fetch the UserDetails from your service or repo
+        final UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getEmail()); // Fetch the UserDetails from your service or repo
         Optional<UserModel> optionalUser = Optional.ofNullable(userRepo.findFirstByEmail(userDetails.getUsername()));
 
         // Use the public method to generate the JWT
@@ -75,4 +83,6 @@ public class usercontroller {
         }
         return authenticationReponse;
     }
+
+
 }

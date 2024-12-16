@@ -6,7 +6,7 @@ import lombok.Data;
 public class AuthenticationRequest
 {
     private String email;
-
+    private String passwd;
     public String getEmail() {
         return email;
     }
@@ -23,5 +23,5 @@ public class AuthenticationRequest
         this.passwd = passwd;
     }
 
-    private String passwd;
+
 }

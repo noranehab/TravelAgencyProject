@@ -10,4 +10,5 @@ public interface UserRepo extends JpaRepository<UserModel, Integer> {
 
  UserModel findFirstByEmail(String email);
 
+
 }
