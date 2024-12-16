@@ -1,7 +1,7 @@
 package com.TravelAGency.TravelAgency.User.services.authintication;
 
 import java.util.Optional;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.TravelAGency.TravelAgency.User.UserModel;
 import com.TravelAGency.TravelAgency.User.UserRepo;
 import com.TravelAGency.TravelAgency.User.dto.UserDto;
@@ -17,10 +17,14 @@ public class AuthService implements UserService
 {
     private final UserRepo userRepository;
     private UserRepo userRepo;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 @Autowired
-    public AuthService(UserRepo userRepository) {
+    public AuthService(UserRepo userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+
         this.userRepository = userRepository;
-    }
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+}
 
     @Autowired
     public void setter(UserRepo userRepo) {
@@ -32,11 +36,13 @@ public class AuthService implements UserService
     public UserDto signUpUser(signUpRequest signUpRequest)
     {
         UserModel user=new UserModel();
+
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
-
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
-       user.getPasswd(signUpRequest.getPasswd());
+        String encodedPassword = bCryptPasswordEncoder.encode(signUpRequest.retrievePassword());
+        user.setPasswd(encodedPassword);
+
         return userRepo.save(user).getDto();
     }
 

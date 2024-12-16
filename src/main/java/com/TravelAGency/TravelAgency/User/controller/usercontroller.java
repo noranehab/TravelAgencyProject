@@ -62,27 +62,20 @@ public class usercontroller {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public AuthenticationReponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<String> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
+            // Attempt to authenticate the user
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPasswd()));
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Incorrect Username or passwd.");
+            // If authentication fails, return error message
+            return new ResponseEntity<>("Incorrect Username or Password.", HttpStatus.UNAUTHORIZED);
         }
 
-        final UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getEmail()); // Fetch the UserDetails from your service or repo
-        Optional<UserModel> optionalUser = Optional.ofNullable(userRepo.findFirstByEmail(userDetails.getUsername()));
-
-        // Use the public method to generate the JWT
-        final String jwt = jwtUtil.generateToken(userDetails);
-
-        AuthenticationReponse authenticationReponse = new AuthenticationReponse();
-        if (optionalUser.isPresent()) {
-            authenticationReponse.setJwt(jwt);
-            authenticationReponse.setUserId(optionalUser.get().getId());
-        }
-        return authenticationReponse;
+        // If authentication is successful, return a success message
+        return new ResponseEntity<>("Logged in successfully", HttpStatus.OK);
     }
+
 
 
 }

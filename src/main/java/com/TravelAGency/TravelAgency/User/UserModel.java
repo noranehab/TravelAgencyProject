@@ -25,7 +25,7 @@ public class UserModel implements UserDetails {
         return name;
     }
 
-    public String getPasswd(String passwd) {
+   public String retrievePassword(String passwd) {
         return this.passwd;
     }
 
@@ -65,7 +65,7 @@ public class UserModel implements UserDetails {
         this.id = id;
     }
 
-    @Column(name = "passwd", nullable = false)
+   // @Column(name = "passwd", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//generating pk
     private Long id;
@@ -92,6 +92,8 @@ return userdto;
     public String getPassword() {
         return passwd;
     }
+
+
 
     @Override
     public String getUsername() {
