@@ -24,6 +24,8 @@ import java.util.List;
 @ComponentScan(basePackages = "com.TravelAGency.TravelAgency.User.services.authintication")
 
 public class WebSecurityConfig {
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
 
     private final UserService userService;
@@ -45,7 +47,7 @@ public class WebSecurityConfig {
                 }))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated());   //missing part if we want admin role video 18
 
         return http.build();
     }
