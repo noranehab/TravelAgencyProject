@@ -49,7 +49,7 @@ public class signUpRequest {
         return id;
     }
 
-    public String getPasswd() {
+    public String retrievePassword() {
         return passwd;
     }
 

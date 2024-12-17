@@ -1,7 +1,7 @@
 package com.TravelAGency.TravelAgency.User.services.authintication;
 
 import java.util.Optional;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.TravelAGency.TravelAgency.User.UserModel;
 import com.TravelAGency.TravelAgency.User.UserRepo;
 import com.TravelAGency.TravelAgency.User.dto.UserDto;
@@ -17,9 +17,13 @@ public class AuthService implements UserService
 {
     private final UserRepo userRepository;
     private UserRepo userRepo;
-@Autowired
-    public AuthService(UserRepo userRepository) {
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    public AuthService(UserRepo userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Autowired
@@ -28,15 +32,17 @@ public class AuthService implements UserService
     }
 
 
-//takes request info and save it to the db
+    //takes request info and save it to the db
     public UserDto signUpUser(signUpRequest signUpRequest)
     {
         UserModel user=new UserModel();
+
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
-
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
-       user.getPasswd(signUpRequest.getPasswd());
+        String encodedPassword = bCryptPasswordEncoder.encode(signUpRequest.retrievePassword());
+        user.setPasswd(encodedPassword);
+
         return userRepo.save(user).getDto();
     }
 
@@ -46,14 +52,11 @@ public class AuthService implements UserService
     }
 
     public UserDetailsService userDetailsService(){
-    return new UserDetailsService() {
-        @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return username -> {
             Optional<UserModel> userOptional = Optional.ofNullable(userRepository.findFirstByEmail(username));
             return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        }
-    };
+        };
     }
 
 }
