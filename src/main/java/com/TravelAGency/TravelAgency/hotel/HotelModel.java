@@ -35,4 +35,8 @@ public class HotelModel {
     public List<RoomModel> getRooms() {
         return rooms;
     }
+
+    public void setHotelName(String hotelName) {
+        name = hotelName;
+    }
 }

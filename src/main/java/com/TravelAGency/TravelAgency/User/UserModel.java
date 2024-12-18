@@ -1,14 +1,16 @@
 package com.TravelAGency.TravelAgency.User;
 
+import com.TravelAGency.TravelAgency.Event.EventModel;
 import com.TravelAGency.TravelAgency.User.dto.UserDto;
+import com.TravelAGency.TravelAgency.hotel.HotelModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,6 +22,22 @@ import java.util.List;
 @Scope("prototype")
 public class UserModel implements UserDetails {
    private String name;
+
+
+
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id") // Maps the relationship to this user's ID
+    private List<HotelModel> hotelBookings;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id") // Maps the relationship to this user's ID
+    private List<EventModel> eventBookings;
+
+
+
+
+
 
     public String getName() {
         return name;
@@ -69,6 +87,16 @@ public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//generating pk
     private Long id;
+
+    public List<HotelModel> getHotelBookings() {
+        return hotelBookings;
+    }
+
+    // Getter for eventBookings
+    public List<EventModel> getEventBookings() {
+        return eventBookings;
+    }
+
 
 public UserDto getDto()
 {

@@ -1,4 +1,4 @@
-package com.TravelAGency.TravelAgency.notifications_system;
+package com.TravelAGency.TravelAgency.notifications_system.PasswordRest_Notification;
 
 public class PasswordResetRequest {
 
