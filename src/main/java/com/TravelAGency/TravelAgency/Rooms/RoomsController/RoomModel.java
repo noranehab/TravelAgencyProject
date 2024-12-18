@@ -17,15 +17,18 @@ public class RoomModel
 {
     @Id
     private Long RoomId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer RoomNumber;
     private String Hotel;
     private RoomSpec RoomType;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-
+    private String name;
+    private long price;
+    private boolean available;
     public Integer getRoomNumber() {
         return RoomNumber;
     }
+
 
     public void setRoomNumber(Integer roomNumber) {
         RoomNumber = roomNumber;
@@ -45,6 +48,13 @@ public class RoomModel
 
     public void setRoomType(RoomSpec roomType) {
         RoomType = roomType;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public long getPrice() {
+        return price;
     }
 
 
