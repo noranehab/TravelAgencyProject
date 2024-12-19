@@ -129,6 +129,7 @@ public class usercontroller {
         user.getHotelBookings().add(hotel);
         userRepo.save(user);
 
+
         // Send SMS notification
         String message = "Hello " + user.getName() + ", you have successfully booked the hotel: " + hotelName;
         notificationService.sendSmsNotification(String.valueOf(user.getPhoneNumber()), message);
