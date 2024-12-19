@@ -16,16 +16,20 @@ import org.springframework.stereotype.Component;
 public class RoomModel
 {
     @Id
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long RoomId;
-    private Integer RoomNumber;
+
     private String Hotel;
     private RoomSpec RoomType;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-
+    public String name;
+    private long price;
+    private boolean available;
+    private Integer RoomNumber;
     public Integer getRoomNumber() {
         return RoomNumber;
     }
+
 
     public void setRoomNumber(Integer roomNumber) {
         RoomNumber = roomNumber;
@@ -46,6 +50,29 @@ public class RoomModel
     public void setRoomType(RoomSpec roomType) {
         RoomType = roomType;
     }
+    public String getName() {
+        return name;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+
+
+
+
+
 
 
 
