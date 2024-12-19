@@ -1,15 +1,19 @@
 package com.TravelAGency.TravelAgency.services;
-
 import com.TravelAGency.TravelAgency.User.dto.RoomDto;
+
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomModel;
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 @Service
-@RequiredArgsConstructor
+
 public class roomServicesIm implements RoomServices {
     private final RoomRepository roomRepository;
+    public roomServicesIm(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
+    }
 
     public boolean postRoom(RoomDto roomDto) {
         try {
