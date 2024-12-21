@@ -9,20 +9,26 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationService extends BaseNotificationService {
-
- //   @Autowired
-    //private PasswordResetNotificationService passwordResetNotificationService;
-
-   // @Autowired
-    //private BookingNotificationService bookingNotificationService;
+    @Autowired
+    private NotificationStatisticsService notificationStatisticsService;
 
     public void sendPasswordResetNotification(UserModel user, String massage) {
-sendSms(user.getEmail(), massage);
-         sendEmail(user.getEmail(), massage);
+       try {
+           sendSms(user.getEmail(), massage);
+           sendEmail(user.getEmail(), massage);
+           notificationStatisticsService.incrementEmailNotifications();
+           notificationStatisticsService.incrementSmsNotifications();
+       }
+       catch (Exception e) {notificationStatisticsService.incrementFailedNotifications();}
+
     }
     public void sendSmsNotification(String phoneNumber, String message) {
-       sendSms(phoneNumber, message);
+     try {
+         sendSms(phoneNumber, message);
 
+         notificationStatisticsService.incrementSmsNotifications();
+     }
+     catch (Exception e) {notificationStatisticsService.incrementFailedNotifications();}
     }
 
 
