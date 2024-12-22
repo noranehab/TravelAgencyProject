@@ -1,8 +1,10 @@
 package com.TravelAGency.TravelAgency.services;
 
-import com.TravelAGency.TravelAgency.User.dto.RoomDto;
+import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomDto.RoomDto;
+
+import java.util.List;
 
 public interface RoomServices {
-    boolean postRoom(RoomDto roomDto);
+     List<RoomDto> SearchForRoom(RoomDto roomDto);
 
 }

@@ -9,87 +9,71 @@ import org.springframework.stereotype.Component;
 
 @Entity
 @Data
-@Table(name="Rooms")
+@Table(name = "Rooms")
 @Component
 @Scope("prototype")
+public class RoomModel {
 
-public class RoomModel
-{
     @Id
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long RoomId;
-
-    private String Hotel;
-    private RoomSpec RoomType;
-    public String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // auto-generate roomId
+    private Long roomId;
     private long price;
     private boolean available;
-    private Integer RoomNumber;
+    private Integer roomNumber;
+
+    @Enumerated(EnumType.STRING)  // Store the enum as a string in the database
+    @Column(name = "room_type")
+    private RoomSpec roomType;
+
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private HotelModel hotel;  // Each room belongs to a hotel
+
+    // Getters and Setters
+
     public Integer getRoomNumber() {
-        return RoomNumber;
+        return roomNumber;
     }
 
-
     public void setRoomNumber(Integer roomNumber) {
-        RoomNumber = roomNumber;
+        this.roomNumber = roomNumber;
     }
 
     public String getHotel() {
-        return Hotel;
+        return hotel != null ? hotel.getName() : null; // Get hotel name (check if hotel is not null)
     }
 
-    public void setHotel(String hotel) {
-        Hotel = hotel;
+    public void setHotel(HotelModel hotel) {
+        this.hotel = hotel;
     }
 
     public RoomSpec getRoomType() {
-        return RoomType;
+        return roomType;
     }
 
     public void setRoomType(RoomSpec roomType) {
-        RoomType = roomType;
+        this.roomType = roomType;
     }
-    public String getName() {
-        return name;
-    }
+
+
 
     public long getPrice() {
         return price;
-    }
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setPrice(long price) {
         this.price = price;
     }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
     public void setAvailable(boolean available) {
         this.available = available;
     }
 
-
-
-
-
-
-
-
-
-    public void setId(Long id) {
-        this.RoomId = id;
-    }
-
-    public Long getId() {
-        return RoomId;
-    }
-
-    // Many rooms can belong to one hotel
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
-    private HotelModel hotel; // Each room belongs to a hotel
-
-    public void setHotel(HotelModel hotel) {
-        this.hotel = hotel;
+    public Long getRoomId() {
+        return roomId;
     }
 }
