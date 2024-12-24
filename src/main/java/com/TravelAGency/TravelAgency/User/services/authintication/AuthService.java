@@ -1,6 +1,9 @@
 package com.TravelAGency.TravelAgency.User.services.authintication;
 
 import java.util.Optional;
+
+import com.TravelAGency.TravelAgency.Event.EventModel;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.TravelAGency.TravelAgency.User.UserModel;
 import com.TravelAGency.TravelAgency.User.UserRepo;
@@ -11,24 +14,40 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class AuthService implements UserService
 {
+
+
     private final UserRepo userRepository;
     private UserRepo userRepo;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private RestTemplate restTemplate;
+    @Value("${event.api.url}")
+    private String apiUrl;
     @Autowired
     public AuthService(UserRepo userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+
     }
 
     @Autowired
     public void setter(UserRepo userRepo) {
         this.userRepo = userRepo;
+    }
+
+    public EventModel[] fetchEvents() {
+        try {
+            return restTemplate.getForObject(apiUrl, EventModel[].class);
+        } catch (Exception e) {
+            System.err.println("Error fetching events: " + e.getMessage());
+            return new EventModel[0]; // Return an empty array if there's an error
+        }
     }
 
 
@@ -59,4 +78,8 @@ public class AuthService implements UserService
         };
     }
 
+    @Autowired
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 }

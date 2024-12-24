@@ -1,29 +1,32 @@
 package com.TravelAGency.TravelAgency.Event;
 
-import com.TravelAGency.TravelAgency.hotel.HotelModel;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 
-public class EventModel {
+public class EventDto {
 
     private Long id;
-    @JsonProperty("event_name")
     private String eventName;
-    @JsonProperty("type")
-    private String event_type;
+    private String eventType;
     private String address;
+    private int tickets;
 
-    public int getTicket() {
-        return tickets;
-    }
 
-    public void setTicket(int ticket) {
+
+    public EventDto(Long id, String eventName, String eventType, String address,int tickets) {
+        this.id = id;
+        this.eventName = eventName;
+        this.eventType = eventType;
+        this.address = address;
         this.tickets = tickets;
     }
 
-    @JsonProperty("tickets")
-    private Integer tickets;
-    // Getters and setters
+    // Getters and Setters
+    public int getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(int tickets) {
+        this.tickets = tickets;
+    }
     public Long getId() {
         return id;
     }
@@ -40,12 +43,12 @@ public class EventModel {
         this.eventName = eventName;
     }
 
-    public String getEvent_type() {
-        return event_type;
+    public String getEventType() {
+        return eventType;
     }
 
-    public void setEvent_type(String event_type) {
-        this.event_type = event_type;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     public String getAddress() {
@@ -56,4 +59,3 @@ public class EventModel {
         this.address = address;
     }
 }
-

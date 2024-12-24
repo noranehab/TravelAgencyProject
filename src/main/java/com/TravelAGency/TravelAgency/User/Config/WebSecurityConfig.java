@@ -3,6 +3,7 @@ package com.TravelAGency.TravelAgency.User.Config;
 import com.TravelAGency.TravelAgency.User.services.authintication.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -26,7 +28,10 @@ import java.util.List;
 
 public class WebSecurityConfig {
 
+
     private final UserService userService;
+    @Value("${event.api.url}")
+    private String apiUrl;
 @Autowired
 @Lazy
     public WebSecurityConfig(UserService userService)
@@ -71,5 +76,10 @@ public class WebSecurityConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

@@ -1,4 +1,4 @@
-package com.TravelAGency.TravelAgency.hotel;
+/*package com.TravelAGency.TravelAgency.hotel;
 
 import com.TravelAGency.TravelAgency.Event.EventModel;
 import com.TravelAGency.TravelAgency.Event.EventRepository;
@@ -37,7 +37,7 @@ public class HotelController {
         hotel.getRooms().add(roomModel);
         return hotelRepository.save(hotel);
     }
-    @PostMapping("/{hotelId}/events")
+   /* @PostMapping("/{hotelId}/events")
     public EventModel addEventToHotel(@PathVariable Long hotelId, @RequestBody EventModel eventModel) {
         // Find the hotel by its ID
         HotelModel hotel = hotelRepository.findById(hotelId)
@@ -48,9 +48,9 @@ public class HotelController {
 
 
         return eventRepository.save(eventModel);
-    }
+    }*/
 
 
 
 
-}
+

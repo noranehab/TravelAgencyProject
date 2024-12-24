@@ -1,6 +1,8 @@
 package com.TravelAGency.TravelAgency.User.controller;
 
+import com.TravelAGency.TravelAgency.Event.EventDto;
 import com.TravelAGency.TravelAgency.Event.EventModel;
+import com.TravelAGency.TravelAgency.Event.EventServices.EventService;
 import com.TravelAGency.TravelAgency.User.UserModel;
 import com.TravelAGency.TravelAgency.User.UserRepo;
 import com.TravelAGency.TravelAgency.User.dto.AuthenticationRequest;
@@ -38,6 +40,11 @@ public class usercontroller {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setAuthService(AuthService authService) {
+        this.authService = authService;
+    }
 
 
 
@@ -82,17 +89,18 @@ public class usercontroller {
     private NotificationService notificationService;
     @Autowired
     private NotificationStatisticsService notificationStat;
+    @Autowired
+    private EventService eventService;
 
 
 
     public void UserController(UserRepo userRepo, NotificationService notificationService,
-                               UserService userService, AuthenticationManager authenticationManager,
-                               AuthService authService) {
+                               UserService userService, AuthenticationManager authenticationManager) {
         this.userRepo = userRepo;
         this.notificationService = notificationService;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
-        this.authService = authService;
+
     }
     @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
     public ResponseEntity<String> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest) {
@@ -138,24 +146,42 @@ public class usercontroller {
     }
 
     @PostMapping("/book-event")
-    public ResponseEntity<String> bookEvent(@RequestParam Long userId, @RequestParam String eventName) {
-        Optional<UserModel> userOpt = userRepo.findById(Math.toIntExact(userId));
+    public ResponseEntity<String> bookEvent(@RequestParam Integer userId, @RequestParam String eventName) {
+        // Check if the user exists
+        Optional<UserModel> userOpt = userRepo.findById(userId);
         if (userOpt.isEmpty()) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
         UserModel user = userOpt.get();
 
-        EventModel event = new EventModel();
-        event.setEventName(eventName);
-        user.getEventBookings().add(event);
-        userRepo.save(user);
 
-        String message = "Hello " + user.getName() + ", you have successfully booked the event: " + eventName;
+        List<EventDto> events = eventService.fetchEventsFromApi();
+        EventDto eventToBook = events.stream()
+                .filter(event -> event.getEventName().equalsIgnoreCase(eventName))
+                .findFirst()
+                .orElse(null);
+
+        if (eventToBook == null) {
+            return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+        }
+
+        if (eventToBook.getTickets() <= 0) {
+            return new ResponseEntity<>("No tickets available for the event: " + eventName, HttpStatus.BAD_REQUEST);
+        }
+
+
+        eventToBook.setTickets(eventToBook.getTickets() - 1); // Decrease the ticket count by 1
+
+        System.out.println("Updated ticket count for event: " + eventName + " to " + eventToBook.getTickets());
+
+        String message = "Hello " + user.getName() + ", you have successfully booked the event: " + eventName
+                + ". Remaining tickets: " + eventToBook.getTickets();
         notificationService.sendSmsNotification(String.valueOf(user.getPhoneNumber()), message);
 
         return new ResponseEntity<>("Event booked successfully and SMS sent", HttpStatus.OK);
     }
+
 
 
 

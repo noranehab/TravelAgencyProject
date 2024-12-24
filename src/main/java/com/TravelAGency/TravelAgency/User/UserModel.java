@@ -30,10 +30,10 @@ public class UserModel implements UserDetails {
     @JoinColumn(name = "user_id") // Maps the relationship to this user's ID
     private List<HotelModel> hotelBookings;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  /*  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id") // Maps the relationship to this user's ID
     private List<EventModel> eventBookings;
-
+*/
 
 
 
@@ -93,10 +93,10 @@ public class UserModel implements UserDetails {
     }
 
     // Getter for eventBookings
-    public List<EventModel> getEventBookings() {
+  /*  public List<EventModel> getEventBookings() {
         return eventBookings;
     }
-
+*/
 
 public UserDto getDto()
 {

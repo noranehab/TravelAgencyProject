@@ -1,30 +1,30 @@
 package com.TravelAGency.TravelAgency.Event;
 
-import com.TravelAGency.TravelAgency.hotel.HotelModel;
-import com.TravelAGency.TravelAgency.hotel.HotelRepository;
+import com.TravelAGency.TravelAgency.Event.EventServices.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/hotels")
+@RequestMapping("/api/auth")
 public class EventController {
 
-    @Autowired
-    private HotelRepository hotelRepository;
+    private final EventService eventService;
 
     @Autowired
-    private EventRepository eventRepository;
-
-    @PostMapping("/{hotelId}/add-event")
-    public EventModel addEventToHotel(@PathVariable Long hotelId, @RequestBody EventModel eventModel) {
-        HotelModel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new RuntimeException("Hotel not found!"));
-
-        eventModel.setHotel(hotel);
-
-        return eventRepository.save(eventModel);
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
     }
-//comment2
 
+
+    @RequestMapping(value = "/DisplayEvent", method = RequestMethod.GET)
+    public List<EventDto> displayEvents() {
+        return eventService.fetchEventsFromApi();
+    }
+
+    @RequestMapping(value = "/SearchEvent", method = RequestMethod.GET)
+    public List<EventDto> searchEventsByLocation(@RequestParam String location) {
+        return eventService.searchEventsByLocation(location);
+    }
 }
-
