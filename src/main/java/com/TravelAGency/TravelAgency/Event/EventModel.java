@@ -12,6 +12,7 @@ public class EventModel {
     @JsonProperty("type")
     private String event_type;
     private String address;
+    private HotelModel hotel;  // The hotel hosting the event
 
     public int getTicket() {
         return tickets;
@@ -54,6 +55,14 @@ public class EventModel {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public HotelModel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(HotelModel hotel) {
+        this.hotel = hotel;
     }
 }
 

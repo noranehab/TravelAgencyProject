@@ -58,4 +58,6 @@ public class EventDto {
     public void setAddress(String address) {
         this.address = address;
     }
+
+
 }

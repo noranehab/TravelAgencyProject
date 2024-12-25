@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
 
+
+
 import java.util.List;
 
 @Configuration
@@ -58,6 +60,8 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
+
 
 
 

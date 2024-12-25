@@ -2,6 +2,8 @@ package com.TravelAGency.TravelAgency.Event.EventServices;
 
 import com.TravelAGency.TravelAgency.Event.EventDto;
 import com.TravelAGency.TravelAgency.Event.EventModel;
+import com.TravelAGency.TravelAgency.Event.EventRepository;
+import com.TravelAGency.TravelAgency.hotel.HotelModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -34,7 +36,14 @@ public class EventService {
         return List.of();
     }
 
+    @Autowired
+    private EventRepository eventRepository;
 
+    // Fetch events related to the booked hotel
+    public List<EventModel> getEventsForHotel(HotelModel hotel) {
+        // Fetch events from the database that are related to the specified hotel
+        return eventRepository.findByHotel(hotel);
+    }
     public List<EventDto> searchEventsByLocation(String location) {
         List<EventDto> events = fetchEventsFromApi();
         return events.stream()
