@@ -1,7 +1,6 @@
 package com.TravelAGency.TravelAgency.User.controller;
 
 import com.TravelAGency.TravelAgency.Event.EventDto;
-import com.TravelAGency.TravelAgency.Event.EventModel;
 import com.TravelAGency.TravelAgency.Event.EventRepository;
 import com.TravelAGency.TravelAgency.Event.EventServices.EventService;
 import com.TravelAGency.TravelAgency.Event.UserEvents;
@@ -19,7 +18,6 @@ import com.TravelAGency.TravelAgency.User.services.authintication.AuthService;
 import com.TravelAGency.TravelAgency.User.services.authintication.DashboardService;
 import com.TravelAGency.TravelAgency.User.util.JwtUtil;
 import com.TravelAGency.TravelAgency.User.services.authintication.UserService;
-import com.TravelAGency.TravelAgency.notifications_system.EventRecommendationService;
 import com.TravelAGency.TravelAgency.notifications_system.NotificationService;
 import com.TravelAGency.TravelAgency.notifications_system.NotificationStatisticsService;
 import jakarta.transaction.Transactional;
@@ -39,8 +37,7 @@ import java.util.*;
 @RequestMapping("/api/auth")
 public class usercontroller {
 
-    @Autowired
-    private EventRecommendationService eventRecommendationService;
+
     @Autowired
     private AuthService authService;
     @Autowired
@@ -213,13 +210,6 @@ public class usercontroller {
         // Mark the room as no longer available
         room.setAvailable(false);
         roomRepo.save(room);
-
-        String message = "Hello " + user.getName() + ", you have successfully booked " + room.getRoomNumber() ;
-
-        eventRecommendationService.sendRecommendedEvents(user, room);
-
-        notificationService.sendSmsNotification(String.valueOf(user.getPhoneNumber()), message);
-
 
         // Return a success message
         return new ResponseEntity<>("Room booked successfully! Total price: " + totalPrice, HttpStatus.OK);
