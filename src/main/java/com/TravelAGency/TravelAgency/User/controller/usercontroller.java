@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -154,7 +155,9 @@ public class usercontroller {
 
         // Step 2: Update the user's password
         UserModel user = userOptional.get();
-        user.setPasswd(passwordResetRequest.getNewPassword()); // Hash the password before saving
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String newpass =passwordEncoder.encode(passwordResetRequest.getNewPassword());
+        user.setPasswd(newpass); // Hash the password before saving
         userRepo.save(user);
 
         // Step 3: Send notification to the user
