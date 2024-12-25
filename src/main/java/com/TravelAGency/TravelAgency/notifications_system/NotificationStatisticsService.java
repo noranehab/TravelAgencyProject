@@ -31,7 +31,7 @@ public class NotificationStatisticsService {
     }
 
     public void incrementFailedNotifications() {
-       incrementFailedNotifications();
+        FailedNotificationsSent.incrementAndGet();
     }
 
 
