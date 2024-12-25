@@ -3,7 +3,7 @@ package com.TravelAGency.TravelAgency.Event;
 
 public class EventDto {
 
-    private Long id;
+    private int id;
     private String eventName;
     private String eventType;
     private String address;
@@ -11,7 +11,7 @@ public class EventDto {
 
 
 
-    public EventDto(Long id, String eventName, String eventType, String address,int tickets) {
+    public EventDto(int id, String eventName, String eventType, String address,int tickets) {
         this.id = id;
         this.eventName = eventName;
         this.eventType = eventType;
@@ -27,11 +27,11 @@ public class EventDto {
     public void setTickets(int tickets) {
         this.tickets = tickets;
     }
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 public class EventModel {
 
-    private Long id;
+    private int id;
     @JsonProperty("event_name")
     private String eventName;
     @JsonProperty("type")
@@ -22,13 +22,13 @@ public class EventModel {
     }
 
     @JsonProperty("tickets")
-    private Integer tickets;
+    private int tickets;
     // Getters and setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

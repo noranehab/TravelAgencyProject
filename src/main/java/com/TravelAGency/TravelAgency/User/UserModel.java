@@ -1,6 +1,7 @@
 package com.TravelAGency.TravelAgency.User;
 
 import com.TravelAGency.TravelAgency.Event.EventModel;
+import com.TravelAGency.TravelAgency.Event.UserEvents;
 import com.TravelAGency.TravelAgency.User.dto.UserDto;
 import com.TravelAGency.TravelAgency.hotel.HotelModel;
 import jakarta.persistence.*;
@@ -24,15 +25,16 @@ public class UserModel implements UserDetails {
    private String name;
 
 
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<UserEvents> userEvents;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id") // Maps the relationship to this user's ID
     private List<HotelModel> hotelBookings;
 
-  /*  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id") // Maps the relationship to this user's ID
-    private List<EventModel> eventBookings;
+ /*  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id") // Maps the relationship to this user's ID
+    private List<UserEvents> eventBookings;
 */
 
 
@@ -93,10 +95,10 @@ public class UserModel implements UserDetails {
     }
 
     // Getter for eventBookings
-  /*  public List<EventModel> getEventBookings() {
-        return eventBookings;
+    public List<UserEvents> getEventBookings() {
+        return userEvents;
     }
-*/
+
 
 public UserDto getDto()
 {

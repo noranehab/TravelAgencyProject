@@ -3,6 +3,7 @@ package com.TravelAGency.TravelAgency.User.services.authintication;
 import java.util.Optional;
 
 import com.TravelAGency.TravelAgency.Event.EventModel;
+import com.TravelAGency.TravelAgency.User.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.TravelAGency.TravelAgency.User.UserModel;
@@ -23,16 +24,18 @@ public class AuthService implements UserService
 
     private final UserRepo userRepository;
     private UserRepo userRepo;
-
+    private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private RestTemplate restTemplate;
     @Value("${event.api.url}")
     private String apiUrl;
     @Autowired
-    public AuthService(UserRepo userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public AuthService(UserRepo userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, JwtUtil jwtUtil1) {
 
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.jwtUtil = jwtUtil1;
+        this.restTemplate = new RestTemplate();
 
     }
 

@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2Res
 import org.springframework.security.config.annotation.rsocket.RSocketSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
@@ -49,7 +50,7 @@ public String  extractUserName(String token)
   return
 extractClaim(token,Claims::getSubject);}
 
-    private Date extractExpiration(String token)
+    public Date extractExpiration(String token)
     {return extractClaim(token,Claims::getExpiration);}
 
     private boolean isTokenExpired(String token)
