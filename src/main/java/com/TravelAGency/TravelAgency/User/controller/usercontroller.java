@@ -158,14 +158,14 @@ public class usercontroller {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
-        // Step 2: Update the user's password
+
         UserModel user = userOptional.get();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String newpass =passwordEncoder.encode(passwordResetRequest.getNewPassword());
-        user.setPasswd(newpass); // Hash the password before saving
+        user.setPasswd(newpass);
         userRepo.save(user);
 
-        // Step 3: Send notification to the user
+
         String notificationMessage = "Your password has been successfully reset.";
         notificationService.sendPasswordResetNotification(user, notificationMessage);
 
@@ -173,7 +173,6 @@ public class usercontroller {
     }
 
 
-    // sending Notification for booking
 
     @PostMapping("/book-room")
     @Transactional
@@ -181,58 +180,55 @@ public class usercontroller {
             @RequestParam int userId,
             @RequestParam Long roomId,
             @RequestParam int numberOfNights,
-            @RequestParam RoomSpec roomType) { // Mandatory roomType parameter
+            @RequestParam RoomSpec roomType) {
 
-        // Check if the user exists
+
         UserModel user = userRepo.findById(userId).orElse(null);
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
-        // Check if the room exists
+
         RoomModel room = roomRepo.findById(roomId).orElse(null);
         if (room == null) {
             return new ResponseEntity<>("Room not found", HttpStatus.NOT_FOUND);
         }
 
-        // Check if the room is available
+
         if (!room.isAvailable()) {
             return new ResponseEntity<>("Room is not available", HttpStatus.BAD_REQUEST);
         }
 
-        // Check if the room type matches the requested type
         if (room.getRoomType() != roomType) {
             return new ResponseEntity<>("Room type does not match the requested type", HttpStatus.BAD_REQUEST);
         }
 
-        // Calculate the total price
+
         long totalPrice = room.getPrice() * numberOfNights;
 
-        // Create the booking entry
         UserRooms booking = new UserRooms();
         booking.setUser(user);
         booking.setRoom(room);
         booking.setPrice(totalPrice);
         booking.setnumberOfNights(numberOfNights);
         booking.setRoomNumber(room.getRoomNumber());
-        booking.setRoomType(room.getRoomType()); // Set the room type from the RoomModel
+        booking.setRoomType(room.getRoomType());
 
-        // Save the booking to the database
+
         userRoomRepo.save(booking);
 
-        // Mark the room as no longer available
+
         room.setAvailable(false);
         roomRepo.save(room);
 
-        // Send an SMS notification to the user
         String message = "Hello " + user.getName() + ", you have successfully booked "
                 + "room number " + room.getRoomNumber() + ".";
         notificationService.sendSmsNotification(String.valueOf(user.getPhoneNumber()), message);
 
-        // Send recommended events to the user
+
         eventRecommendationService.sendRecommendedEvents(user, room);
 
-        // Return a success message
+
         return new ResponseEntity<>("Room booked successfully! Total price: " + totalPrice, HttpStatus.OK);
     }
     @PostMapping("/book-event")
@@ -304,41 +300,7 @@ public class usercontroller {
     }
 
 
-    /*@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-    public ResponseEntity<?> getDashboard(@RequestHeader("Authorization") String token) {
 
-        String jwt = token.startsWith("Bearer ") ? token.substring(7) : token;
-
-        String username;
-        try {
-            username = jwtUtil.extractUserName(jwt);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Invalid Token.", HttpStatus.UNAUTHORIZED);
-        }
-
-
-
-        System.out.println("Extracted username: " + username);  // Debug log
-
-        UserModel user = userRepo.findByEmail(username).orElse(null);
-        if (user == null || !jwtUtil.isTokenValid(jwt, user)) {
-            return new ResponseEntity<>("Unauthorized Access.", HttpStatus.UNAUTHORIZED);
-        }
-
-        // Fetch user bookings
-        List<UserRooms> roomBookings = userRoomRepo.findByUser(user);
-        List<UserEvents> eventBookings = userEventsRepo.findByUser(user);
-
-        // Create a response map
-        Map<String, Object> dashboard = new HashMap<>();
-        dashboard.put("user", user);
-        dashboard.put("roomBookings", roomBookings);
-        dashboard.put("eventBookings", eventBookings);
-
-        return new ResponseEntity<>(dashboard, HttpStatus.OK);
-
-    }
-*/
 
 }
 

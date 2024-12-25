@@ -1,4 +1,5 @@
 package com.TravelAGency.TravelAgency.services;
+import com.TravelAGency.TravelAgency.Rooms.RoomsController.Enum.RoomSpec;
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomDto.RoomDto;
 
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomModel;
@@ -13,28 +14,13 @@ import java.util.stream.Collectors;
 
 public class roomServicesIm implements RoomServices {
     private final RoomRepository roomRepository;
+
     public roomServicesIm(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
 
-    public boolean postRoom(RoomDto roomDto) {
-        try {
-            RoomModel room = new RoomModel();
-            room.setPrice(roomDto.getPrice());
-            room.setRoomType(roomDto.getRoomType());
-            room.setAvailable(true);
-            roomRepository.save(room);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public List<RoomDto> SearchForRoom(RoomDto roomDto) {
-        List<RoomModel> rooms = roomRepository.findByHotel_NameAndRoomType(
-                roomDto.getHotel(),
-                roomDto.getRoomType()
-        );
+    public List<RoomDto> searchForRoom(String hotel, RoomSpec roomType) {
+        List<RoomModel> rooms = roomRepository.findByHotel_NameAndRoomType(hotel, roomType);
         return rooms.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
@@ -48,4 +34,6 @@ public class roomServicesIm implements RoomServices {
         dto.setAvailable(room.isAvailable());
         return dto;
     }
+
+
 }

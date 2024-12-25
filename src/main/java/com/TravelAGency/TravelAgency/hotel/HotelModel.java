@@ -1,6 +1,7 @@
 package com.TravelAGency.TravelAgency.hotel;
 
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomModel ;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -72,6 +73,7 @@ public class HotelModel {
     }
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<RoomModel> rooms;
 
 

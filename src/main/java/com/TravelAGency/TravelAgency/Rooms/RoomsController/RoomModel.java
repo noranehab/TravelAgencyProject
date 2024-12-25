@@ -2,6 +2,8 @@ package com.TravelAGency.TravelAgency.Rooms.RoomsController;
 
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.Enum.RoomSpec;
 import com.TravelAGency.TravelAgency.hotel.HotelModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
@@ -27,6 +29,7 @@ public class RoomModel {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonBackReference
     private HotelModel hotel;  // Each room belongs to a hotel
 
     // Getters and Setters
@@ -40,7 +43,7 @@ public class RoomModel {
     }
 
     public String getHotel() {
-        return hotel != null ? hotel.getName() : null; // Get hotel name (check if hotel is not null)
+        return hotel != null ? hotel.getName() : null;
     }
     public HotelModel getHotell() {
         return hotel;

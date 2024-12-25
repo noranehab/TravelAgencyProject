@@ -27,7 +27,8 @@ public class RoomController {
 
     @RequestMapping(value = "/SearchRoom", method = RequestMethod.POST)
     public ResponseEntity<List<RoomDto>> searchRooms(@RequestBody RoomDto roomDto) {
-        List<RoomDto> rooms = roomService.SearchForRoom(roomDto);
+        List<RoomDto> rooms = roomService.searchForRoom(roomDto.getHotel(), roomDto.getRoomType());
         return ResponseEntity.ok(rooms);
     }
+
 }

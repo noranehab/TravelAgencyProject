@@ -30,11 +30,11 @@ public class EventRecommendationService {
             return;
         }
 
-        // Fetch all events
+
         List<EventDto> events = eventService.fetchEventsFromApi();
         System.out.println("Fetched Events: " + events);
 
-        // Filter events by address
+
         List<EventDto> recommendedEvents = events.stream()
                 .filter(event -> event.getAddress() != null && event.getAddress().equalsIgnoreCase(roomAddress))
                 .collect(Collectors.toList());
@@ -45,7 +45,7 @@ public class EventRecommendationService {
             return;
         }
 
-        // Build the SMS message
+
         StringBuilder message = new StringBuilder("Hello " + user.getName() + ",\n\n"
                 + "You have successfully booked a room at " + room.getHotell().getName() + ".\n\n"
                 + "Here are some events you may be interested in, located at the same address:\n");
