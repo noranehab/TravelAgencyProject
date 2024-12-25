@@ -20,7 +20,6 @@ import com.TravelAGency.TravelAgency.User.util.JwtUtil;
 import com.TravelAGency.TravelAgency.User.services.authintication.UserService;
 import com.TravelAGency.TravelAgency.notifications_system.NotificationService;
 import com.TravelAGency.TravelAgency.notifications_system.NotificationStatisticsService;
-import com.TravelAGency.TravelAgency.notifications_system.PasswordRest_Notification.PasswordResetRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Book;
 import java.util.*;
 
 
@@ -156,7 +154,7 @@ public class usercontroller {
 
         // Step 2: Update the user's password
         UserModel user = userOptional.get();
-        user.setPasswd(passwordResetRequest.getNewPassword()); // Ideally, hash the password before saving
+        user.setPasswd(passwordResetRequest.getNewPassword()); // Hash the password before saving
         userRepo.save(user);
 
         // Step 3: Send notification to the user
@@ -165,6 +163,7 @@ public class usercontroller {
 
         return new ResponseEntity<>("Password reset successfully. A confirmation email has been sent.", HttpStatus.OK);
     }
+
 
     // sending Notification for booking
 
