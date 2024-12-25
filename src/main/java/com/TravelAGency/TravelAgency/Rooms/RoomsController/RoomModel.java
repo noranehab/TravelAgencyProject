@@ -42,6 +42,9 @@ public class RoomModel {
     public String getHotel() {
         return hotel != null ? hotel.getName() : null; // Get hotel name (check if hotel is not null)
     }
+    public HotelModel getHotell() {
+        return hotel;
+    }
 
     public void setHotel(HotelModel hotel) {
         this.hotel = hotel;

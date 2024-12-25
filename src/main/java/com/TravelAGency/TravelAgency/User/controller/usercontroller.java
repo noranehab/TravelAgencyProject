@@ -4,6 +4,7 @@ import com.TravelAGency.TravelAgency.Event.EventDto;
 import com.TravelAGency.TravelAgency.Event.EventRepository;
 import com.TravelAGency.TravelAgency.Event.EventServices.EventService;
 import com.TravelAGency.TravelAgency.Event.UserEvents;
+import com.TravelAGency.TravelAgency.Rooms.RoomsController.Enum.RoomSpec;
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomModel;
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.RoomRepository;
 import com.TravelAGency.TravelAgency.Rooms.RoomsController.UserRooms.UserRoomRepo;
@@ -18,6 +19,7 @@ import com.TravelAGency.TravelAgency.User.services.authintication.AuthService;
 import com.TravelAGency.TravelAgency.User.services.authintication.DashboardService;
 import com.TravelAGency.TravelAgency.User.util.JwtUtil;
 import com.TravelAGency.TravelAgency.User.services.authintication.UserService;
+import com.TravelAGency.TravelAgency.notifications_system.EventRecommendationService;
 import com.TravelAGency.TravelAgency.notifications_system.NotificationService;
 import com.TravelAGency.TravelAgency.notifications_system.NotificationStatisticsService;
 import jakarta.transaction.Transactional;
@@ -63,6 +65,8 @@ public class usercontroller {
     @Autowired
     private DashboardService dashboardService;
     @Autowired
+    private EventRecommendationService eventRecommendationService;
+    @Autowired
     public void setAuthService(AuthService authService) {
         this.authService = authService;
     }
@@ -71,19 +75,20 @@ public class usercontroller {
 
     public usercontroller(AuthService authService, UserRepo userRepo, AuthenticationManager authenticationManager,
                           UserService userService, NotificationService notificationService, EventRepository userEventsRepo,
-                          RoomRepository roomRepo,UserRoomRepo userRoomRepo,JwtUtil jwtUtil, DashboardService dashboardService) {
+                          RoomRepository roomRepo,UserRoomRepo userRoomRepo,JwtUtil jwtUtil, DashboardService dashboardService
+    ,EventRecommendationService eventRecommendationService) {
 
         this.authService = authService;
         this.userRepo = userRepo;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.notificationService = notificationService;
-
         this.userEventsRepo = userEventsRepo;
         this.roomRepo = roomRepo;
         this.userRoomRepo = userRoomRepo;
         this.jwtUtil = jwtUtil;
         this.dashboardService = dashboardService;
+        this.eventRecommendationService = eventRecommendationService;
     }
 
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
@@ -172,7 +177,12 @@ public class usercontroller {
 
     @PostMapping("/book-room")
     @Transactional
-    public ResponseEntity<String> bookRoom(@RequestParam int userId, @RequestParam Long roomId, @RequestParam int numberOfNights) {
+    public ResponseEntity<String> bookRoom(
+            @RequestParam int userId,
+            @RequestParam Long roomId,
+            @RequestParam int numberOfNights,
+            @RequestParam RoomSpec roomType) { // Mandatory roomType parameter
+
         // Check if the user exists
         UserModel user = userRepo.findById(userId).orElse(null);
         if (user == null) {
@@ -190,6 +200,11 @@ public class usercontroller {
             return new ResponseEntity<>("Room is not available", HttpStatus.BAD_REQUEST);
         }
 
+        // Check if the room type matches the requested type
+        if (room.getRoomType() != roomType) {
+            return new ResponseEntity<>("Room type does not match the requested type", HttpStatus.BAD_REQUEST);
+        }
+
         // Calculate the total price
         long totalPrice = room.getPrice() * numberOfNights;
 
@@ -200,9 +215,7 @@ public class usercontroller {
         booking.setPrice(totalPrice);
         booking.setnumberOfNights(numberOfNights);
         booking.setRoomNumber(room.getRoomNumber());
-
-        // Set the roomType in the booking (in case it is not already set)
-        booking.setRoomType(room.getRoomType());  // Set the room type from the RoomModel
+        booking.setRoomType(room.getRoomType()); // Set the room type from the RoomModel
 
         // Save the booking to the database
         userRoomRepo.save(booking);
@@ -211,10 +224,17 @@ public class usercontroller {
         room.setAvailable(false);
         roomRepo.save(room);
 
+        // Send an SMS notification to the user
+        String message = "Hello " + user.getName() + ", you have successfully booked "
+                + "room number " + room.getRoomNumber() + ".";
+        notificationService.sendSmsNotification(String.valueOf(user.getPhoneNumber()), message);
+
+        // Send recommended events to the user
+        eventRecommendationService.sendRecommendedEvents(user, room);
+
         // Return a success message
         return new ResponseEntity<>("Room booked successfully! Total price: " + totalPrice, HttpStatus.OK);
     }
-
     @PostMapping("/book-event")
     public ResponseEntity<String> bookEvent(@RequestParam Integer userId,
                                             @RequestParam String eventName,

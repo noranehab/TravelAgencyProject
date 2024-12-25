@@ -25,6 +25,7 @@ public class UserRooms {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
+    @JsonIgnore
     private RoomModel room;
 
     private long price;

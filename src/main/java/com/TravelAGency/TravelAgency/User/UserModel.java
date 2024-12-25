@@ -35,15 +35,6 @@ public class UserModel implements UserDetails {
     @JsonIgnore
     private List<HotelModel> hotelBookings;
 
- /*  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id") // Maps the relationship to this user's ID
-    private List<UserEvents> eventBookings;
-*/
-
-
-
-
-
     public String getName() {
         return name;
     }
