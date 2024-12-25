@@ -1,5 +1,6 @@
 package com.TravelAGency.TravelAgency.notifications_system;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
+@Component
 public class NotificationStatisticsService {
 
     private AtomicInteger totalNotificationsSent = new AtomicInteger(0);

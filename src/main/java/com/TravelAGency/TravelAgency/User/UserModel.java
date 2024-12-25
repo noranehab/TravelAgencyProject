@@ -4,6 +4,7 @@ import com.TravelAGency.TravelAgency.Event.EventModel;
 import com.TravelAGency.TravelAgency.Event.UserEvents;
 import com.TravelAGency.TravelAgency.User.dto.UserDto;
 import com.TravelAGency.TravelAgency.hotel.HotelModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
@@ -26,10 +27,12 @@ public class UserModel implements UserDetails {
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<UserEvents> userEvents;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id") // Maps the relationship to this user's ID
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
     private List<HotelModel> hotelBookings;
 
  /*  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
